@@ -22,3 +22,5 @@
 
 11. Introduce a FakeRandomSource. Lesson learned: make sure your fake has the same API as the stuff you're
     faking !
+
+12. First refactoring: Introduce NUM_QUESTIONS_BY_CATEGORY, replace 4 named lists by a dict
