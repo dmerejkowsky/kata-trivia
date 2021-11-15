@@ -1,0 +1,10 @@
+1. Let's try to run it (install python2 first)
+
+2. It works, but the messages contain typos
+
+3. Cosmetic changes
+
+4. Run poetry init to add black and pytest
+
+5. Let's keep the log in a test
+
