@@ -51,11 +51,11 @@ class Game:
         for category in Category:
             self.questions[category.value] = make_questions(category)
 
-    def is_playable(self):
-        return self.how_many_players >= 2
-
     def info(self, *args):
         self.log.info(*args)
+
+    def is_playable(self):
+        return self.how_many_players >= 2
 
     def add(self, player_name):
         self.players.append(player_name)

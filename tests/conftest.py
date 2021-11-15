@@ -72,3 +72,13 @@ class SpyLog:
 def game():
     log = SpyLog()
     return Game(log=log)
+
+
+@pytest.fixture
+def playable_game():
+    log = SpyLog()
+    game = Game(log=log)
+    game.add("Alice")
+    game.add("Bob")
+    game.add("Charlie")
+    return game
