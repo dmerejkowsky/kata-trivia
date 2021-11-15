@@ -1,13 +1,13 @@
 from pathlib import Path
 
 import pytest
-
 from conftest import FakeRandomSource
+
 from trivia import RandomSource
 
 
 def test_using_a_fake_random_as_iterator():
-    """Given start, stop and a sequence of results,
+    """Given start, end and a sequence of results,
     make sure that call to random_in_range() returns
     the proper values
     """
@@ -36,6 +36,6 @@ def test_fake_random_using_reference():
 
 
 def test_random_source():
-    random_source = RandomSource(1, 4)
+    random_source = RandomSource(start=1, end=4)
     actual = next(random_source)
     assert 1 <= actual < 4

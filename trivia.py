@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+import random
+import sys
+from pathlib import Path
+
 
 class Game:
     def __init__(self):
@@ -182,6 +186,12 @@ class RandomSource:
         self.start = start
         self.end = end
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return random.randrange(self.start, self.end)
+
 
 def main(testing=False):
     from tests.conftest import FakeRandomSource
@@ -193,8 +203,8 @@ def main(testing=False):
         rand_1 = FakeRandomSource.from_reference(lines[0:2])
         rand_2 = FakeRandomSource.from_reference(lines[3:5])
     else:
-        rand_1 = RandomSource(1, 6)
-        rand_2 = RandomSource(0, 8)
+        rand_1 = RandomSource(start=1, end=6)
+        rand_2 = RandomSource(start=0, end=9)
 
     not_a_winner = False
 
@@ -217,7 +227,6 @@ def main(testing=False):
 
 
 if __name__ == "__main__":
-    import sys
 
-    testing = "--test" in sys.argv
+    testing = "--testing" in sys.argv
     main(testing=testing)
