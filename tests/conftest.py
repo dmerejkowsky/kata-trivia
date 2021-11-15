@@ -1,3 +1,22 @@
+class FakeRandomSource:
+    def __init__(self):
+        self._sequences = {}
+
+    def set_reference(self, range, numbers):
+        (start, end) = range
+        sequence = FakeRandomSequence(start=start, end=end)
+        sequence.set_reference(numbers)
+        self._sequences[range] = sequence
+
+    def apply_reference(self, lines):
+        sequence = FakeRandomSequence.from_reference(lines)
+        self._sequences[(sequence.start, sequence.end)] = sequence
+
+    def in_range(self, start, end):
+        sequence = self._sequences[(start, end)]
+        return next(sequence)
+
+
 class FakeRandomSequence:
     def __init__(self, *, start, end):
         self.start = start

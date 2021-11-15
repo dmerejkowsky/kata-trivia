@@ -182,29 +182,25 @@ class Game:
 
 
 class RandomSource:
-    def __init__(self, *, start, end):
-        self.start = start
-        self.end = end
+    def __init__(self):
+        pass
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return random.randrange(self.start, self.end)
+    def in_range(self, start, end):
+        return random.randrange(start, end)
 
 
 def main(testing=False):
-    from tests.conftest import FakeRandomSequence
+    from tests.conftest import FakeRandomSource
 
     if testing:
         path = Path("reference/randomSeq.txt")
         lines = path.read_text().splitlines()
+        random_source = FakeRandomSource()
 
-        rand_1 = FakeRandomSequence.from_reference(lines[0:2])
-        rand_2 = FakeRandomSequence.from_reference(lines[3:5])
+        random_source.apply_reference(lines[0:2])
+        random_source.apply_reference(lines[3:5])
     else:
-        rand_1 = RandomSource(start=0, end=9)
-        rand_2 = RandomSource(start=1, end=6)
+        random_source = RandomSource()
 
     not_a_winner = False
 
@@ -215,9 +211,9 @@ def main(testing=False):
     game.add("Sue")
 
     while True:
-        game.roll(next(rand_2))
+        game.roll(random_source.in_range(1, 6))
 
-        if next(rand_1) == 7:
+        if random_source.in_range(0, 9) == 7:
             not_a_winner = game.wrong_answer()
         else:
             not_a_winner = game.was_correctly_answered()
