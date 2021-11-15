@@ -194,14 +194,14 @@ class RandomSource:
 
 
 def main(testing=False):
-    from tests.conftest import FakeRandomSource
+    from tests.conftest import FakeRandomSequence
 
     if testing:
         path = Path("reference/randomSeq.txt")
         lines = path.read_text().splitlines()
 
-        rand_1 = FakeRandomSource.from_reference(lines[0:2])
-        rand_2 = FakeRandomSource.from_reference(lines[3:5])
+        rand_1 = FakeRandomSequence.from_reference(lines[0:2])
+        rand_2 = FakeRandomSequence.from_reference(lines[3:5])
     else:
         rand_1 = RandomSource(start=0, end=9)
         rand_2 = RandomSource(start=1, end=6)
