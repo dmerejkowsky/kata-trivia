@@ -205,22 +205,22 @@ class Game:
 
 
 def run_game(*, random_source, log):
-    not_a_winner = False
     game = Game(log)
 
     game.add("Chet")
     game.add("Pat")
     game.add("Sue")
 
+    continue_game = False
     while True:
         game.roll(random_source.in_range(1, 6))
 
         if random_source.in_range(0, 9) == 7:
-            not_a_winner = game.wrong_answer()
+            continue_game = game.wrong_answer()
         else:
-            not_a_winner = not game.was_correctly_answered()
+            continue_game = game.was_correctly_answered()
 
-        if not not_a_winner:
+        if not continue_game:
             break
 
 

@@ -17,6 +17,5 @@ def test_non_regression():
     run_game(random_source=random_source, log=log)
 
     actual = log.messages
-    breakpoint()
     expected = Path("reference/result.txt").read_text().splitlines()
     assert actual == expected
