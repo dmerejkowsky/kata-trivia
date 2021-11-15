@@ -12,10 +12,11 @@ def test_non_regression():
 
     random_source.apply_reference(lines[0:2])
     random_source.apply_reference(lines[3:5])
-    log = Log()
+    log = Log(verbose=False)
 
     run_game(random_source=random_source, log=log)
 
     actual = log.messages
+    breakpoint()
     expected = Path("reference/result.txt").read_text().splitlines()
     assert actual == expected

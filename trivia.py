@@ -28,11 +28,13 @@ class RandomSource:
 
 
 class Log:
-    def __init__(self):
+    def __init__(self, *, verbose=True):
         self.messages = []
+        self.verbose = verbose
 
     def info(self, *args):
-        print(*args)
+        if self.verbose:
+            print(*args)
         message = " ".join(str(x) for x in args)
         self.messages.append(message)
 
@@ -203,6 +205,7 @@ class Game:
 
 
 def run_game(*, random_source, log):
+    not_a_winner = False
     game = Game(log)
 
     game.add("Chet")
@@ -215,14 +218,17 @@ def run_game(*, random_source, log):
         if random_source.in_range(0, 9) == 7:
             not_a_winner = game.wrong_answer()
         else:
-            not_a_winner = game.was_correctly_answered()
+            not_a_winner = not game.was_correctly_answered()
 
         if not not_a_winner:
             break
 
 
 def main():
-    run_game(random_source=RandomSource(), log=Log())
+    random_source = RandomSource()
+    log = Log()
+
+    run_game(random_source=random_source, log=log)
 
 
 if __name__ == "__main__":
