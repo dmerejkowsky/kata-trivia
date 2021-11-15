@@ -2,7 +2,23 @@
 
 import random
 import sys
+from enum import Enum
 from pathlib import Path
+
+NUM_QUESTIONS_BY_CATEGORY = 50
+
+
+class Category(Enum):
+    Pop = "Pop"
+    Sience = "Science"
+    Sports = "Sports"
+    Rock = "Rock"
+
+
+def make_questions(category):
+    return [
+        f"{category.value} Question {i}" for i in range(0, NUM_QUESTIONS_BY_CATEGORY)
+    ]
 
 
 class Game:
@@ -12,22 +28,12 @@ class Game:
         self.purses = [0] * 6
         self.in_penalty_box = [0] * 6
 
-        self.pop_questions = []
-        self.science_questions = []
-        self.sports_questions = []
-        self.rock_questions = []
-
         self.current_player = 0
         self.is_getting_out_of_penalty_box = False
 
-        for i in range(50):
-            self.pop_questions.append("Pop Question %s" % i)
-            self.science_questions.append("Science Question %s" % i)
-            self.sports_questions.append("Sports Question %s" % i)
-            self.rock_questions.append(self.create_rock_question(i))
-
-    def create_rock_question(self, index):
-        return "Rock Question %s" % index
+        self.questions = {}
+        for category in Category:
+            self.questions[category.value] = make_questions(category)
 
     def is_playable(self):
         return self.how_many_players >= 2
@@ -39,8 +45,7 @@ class Game:
         self.in_penalty_box[self.how_many_players] = False
 
         print(player_name + " was added")
-        print("They are player number %s" % len(self.players))
-
+        print("They are player number", len(self.players))
         return True
 
     @property
@@ -94,14 +99,9 @@ class Game:
             self._ask_question()
 
     def _ask_question(self):
-        if self._current_category == "Pop":
-            print(self.pop_questions.pop(0))
-        if self._current_category == "Science":
-            print(self.science_questions.pop(0))
-        if self._current_category == "Sports":
-            print(self.sports_questions.pop(0))
-        if self._current_category == "Rock":
-            print(self.rock_questions.pop(0))
+        questions = self.questions[self._current_category]
+        res = questions.pop(0)
+        print(res)
 
     @property
     def _current_category(self):
