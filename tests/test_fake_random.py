@@ -19,11 +19,3 @@ def test_check_that_references_are_in_range():
     random_source = FakeRandomSource(start=1, end=6)
     with pytest.raises(ValueError):
         random_source.set_reference([6, 7, 3])
-
-
-def test_raises_stop_iteration():
-    random_source = FakeRandomSource(start=1, end=6)
-    random_source.set_reference([6, 1])
-
-    as_list = list(random_source)
-    assert as_list == [6, 1]
