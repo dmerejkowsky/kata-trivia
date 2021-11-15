@@ -36,6 +36,8 @@ def test_fake_random_using_reference():
 
 
 def test_random_source():
+    # This is actually hard to test properly, so let's
+    # be real basic here
     random_source = RandomSource(start=1, end=4)
     actual = next(random_source)
     assert 1 <= actual < 4

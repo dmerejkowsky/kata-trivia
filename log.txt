@@ -18,3 +18,4 @@
 
 9. We need a class that has the good APIs and can read stuff from a predefined sequences, time for classic TDD
 
+10. I have a non-regression test

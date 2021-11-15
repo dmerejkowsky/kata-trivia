@@ -203,8 +203,8 @@ def main(testing=False):
         rand_1 = FakeRandomSource.from_reference(lines[0:2])
         rand_2 = FakeRandomSource.from_reference(lines[3:5])
     else:
-        rand_1 = RandomSource(start=1, end=6)
-        rand_2 = RandomSource(start=0, end=9)
+        rand_1 = RandomSource(start=0, end=9)
+        rand_2 = RandomSource(start=1, end=6)
 
     not_a_winner = False
 
@@ -215,9 +215,9 @@ def main(testing=False):
     game.add("Sue")
 
     while True:
-        game.roll(next(rand_1))
+        game.roll(next(rand_2))
 
-        if next(rand_2) == 7:
+        if next(rand_1) == 7:
             not_a_winner = game.wrong_answer()
         else:
             not_a_winner = game.was_correctly_answered()
