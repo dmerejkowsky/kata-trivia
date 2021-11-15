@@ -1,14 +1,21 @@
-import subprocess
 from pathlib import Path
+
+from trivia import Log, run_game
 
 
 def test_non_regression():
-    process = subprocess.run(
-        ["python3", "trivia.py", "--testing"],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    actual = process.stdout
-    expected = Path("reference/result.txt").read_text()
+    from tests.conftest import FakeRandomSource
+
+    path = Path("reference/randomSeq.txt")
+    lines = path.read_text().splitlines()
+    random_source = FakeRandomSource()
+
+    random_source.apply_reference(lines[0:2])
+    random_source.apply_reference(lines[3:5])
+    log = Log()
+
+    run_game(random_source=random_source, log=log)
+
+    actual = log.messages
+    expected = Path("reference/result.txt").read_text().splitlines()
     assert actual == expected

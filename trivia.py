@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 
 import random
-import sys
 from enum import Enum
-from pathlib import Path
 
 NUM_QUESTIONS_BY_CATEGORY = 50
 
@@ -40,7 +38,9 @@ class Log:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, log):
+        self.log = log
+
         self.players = []
         self.places = [0] * 6
         self.purses = [0] * 6
@@ -48,7 +48,6 @@ class Game:
 
         self.current_player = 0
         self.is_getting_out_of_penalty_box = False
-        self.log = Log()
 
         self.questions = {}
         for category in Category:
@@ -203,22 +202,8 @@ class Game:
         return not (self.purses[self.current_player] == 6)
 
 
-def main(testing=False):
-    from tests.conftest import FakeRandomSource
-
-    if testing:
-        path = Path("reference/randomSeq.txt")
-        lines = path.read_text().splitlines()
-        random_source = FakeRandomSource()
-
-        random_source.apply_reference(lines[0:2])
-        random_source.apply_reference(lines[3:5])
-    else:
-        random_source = RandomSource()
-
-    not_a_winner = False
-
-    game = Game()
+def run_game(*, random_source, log):
+    game = Game(log)
 
     game.add("Chet")
     game.add("Pat")
@@ -236,7 +221,9 @@ def main(testing=False):
             break
 
 
-if __name__ == "__main__":
+def main():
+    run_game(random_source=RandomSource(), log=Log())
 
-    testing = "--testing" in sys.argv
-    main(testing=testing)
+
+if __name__ == "__main__":
+    main()
