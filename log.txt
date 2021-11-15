@@ -24,3 +24,5 @@
     faking !
 
 12. First refactoring: Introduce NUM_QUESTIONS_BY_CATEGORY, replace 4 named lists by a dict
+
+13: Introduce a Log
