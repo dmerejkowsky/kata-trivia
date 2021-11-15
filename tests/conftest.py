@@ -1,3 +1,8 @@
+import pytest
+
+from trivia import Game, RandomSource
+
+
 class FakeRandomSource:
     def __init__(self):
         self._sequences = {}
@@ -52,3 +57,18 @@ class FakeRandomSequence:
             raise StopIteration
         self._index += 1
         return res
+
+
+class SpyLog:
+    def __init__(self):
+        self.messages = []
+
+    def info(self, *args):
+        message = " ".join(str(x) for x in args)
+        self.messages.append(message)
+
+
+@pytest.fixture
+def game():
+    log = SpyLog()
+    return Game(log=log)

@@ -28,15 +28,11 @@ class RandomSource:
 
 
 class Log:
-    def __init__(self, *, verbose=True):
-        self.messages = []
-        self.verbose = verbose
+    def __init__(self):
+        pass
 
     def info(self, *args):
-        if self.verbose:
-            print(*args)
-        message = " ".join(str(x) for x in args)
-        self.messages.append(message)
+        print(*args)
 
 
 class Game:

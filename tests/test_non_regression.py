@@ -1,18 +1,18 @@
 from pathlib import Path
 
-from trivia import Log, run_game
+from conftest import FakeRandomSource, SpyLog
+
+from trivia import run_game
 
 
 def test_non_regression():
-    from tests.conftest import FakeRandomSource
-
     path = Path("reference/randomSeq.txt")
     lines = path.read_text().splitlines()
     random_source = FakeRandomSource()
-
     random_source.apply_reference(lines[0:2])
     random_source.apply_reference(lines[3:5])
-    log = Log(verbose=False)
+
+    log = SpyLog()
 
     run_game(random_source=random_source, log=log)
 

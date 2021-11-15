@@ -1,8 +1,8 @@
-from trivia import Log
+from tests.conftest import SpyLog
 
 
 def test_log():
-    log = Log()
+    log = SpyLog()
     log.info("One")
     log.info("Two")
 
