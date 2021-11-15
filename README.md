@@ -1,0 +1,1 @@
+# The trivia refactoring kata
