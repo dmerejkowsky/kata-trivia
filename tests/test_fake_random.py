@@ -1,5 +1,8 @@
-from conftest import FakeRandomSource
+from pathlib import Path
+
 import pytest
+
+from conftest import FakeRandomSource
 
 
 def test_using_a_fake_random_as_iterator():
@@ -19,3 +22,13 @@ def test_check_that_references_are_in_range():
     random_source = FakeRandomSource(start=1, end=6)
     with pytest.raises(ValueError):
         random_source.set_reference([6, 7, 3])
+
+
+def test_using_file():
+    path = Path("reference/randomSeq.txt")
+    lines = path.read_text().splitlines()
+    random_source = FakeRandomSource.from_reference(lines[0:2])
+    assert random_source.start == 0
+    assert random_source.end == 9
+    first_three = [next(random_source) for i in range(0, 3)]
+    assert first_three == [6, 9, 2]
