@@ -18,4 +18,7 @@
 
 9. We need a class that has the good APIs and can read stuff from a predefined sequences, time for classic TDD
 
-10. I have a non-regression test
+10. I have a non-regression test that passes
+
+11. Introduce a FakeRandomSource. Lesson learned: make sure your fake has the same API as the stuff you're
+    faking !
