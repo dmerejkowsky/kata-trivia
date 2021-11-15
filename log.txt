@@ -6,5 +6,15 @@
 
 4. Run poetry init to add black and pytest
 
-5. Let's keep the log in a test
+5. Let's keep the log in a test - does not work because of
+   random
+
+6. Let's checkout the 'reference' folder from upstream
+
+7. HAHA - now we can write a test if we manage to have
+  trivia.py use reference/randomSeq.txt
+
+8. `def main()`
+
+9. We need a class that has the good APIs and can read stuff from a predefined sequences, time for classic TDD
 
