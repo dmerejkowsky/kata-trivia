@@ -143,9 +143,18 @@ class Game:
         return not (self.purses[self.current_player] == 6)
 
 
-from random import randrange
+def main(testing=False):
+    if testing:
+        path = Path("reference/randomSeq.txt")
+        lines = path.read_text().splitlines()
 
-if __name__ == '__main__':
+
+        rand_1 = FakeRandomSource.from_reference(lines[0:2])
+        rand_2 = FakeRandomSource.from_reference(lines[3:5])
+    else:
+        rand_1 = RandomSource(1, 6)
+        rand_2 = RandomSource(0, 8)
+
     not_a_winner = False
 
     game = Game()
@@ -155,11 +164,18 @@ if __name__ == '__main__':
     game.add('Sue')
 
     while True:
-        game.roll(randrange(5) + 1)
+        game.roll(next(rand_1))
 
-        if randrange(9) == 7:
+        if next(rand_2) == 7:
             not_a_winner = game.wrong_answer()
         else:
             not_a_winner = game.was_correctly_answered()
 
         if not not_a_winner: break
+
+
+
+if __name__ == '__main__':
+    import sys
+    testing = "--test" in sys.argv
+    main()
