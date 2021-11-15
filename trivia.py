@@ -69,7 +69,6 @@ class Game:
 
         self.info(player_name, "was added")
         self.info("They are player number", len(self.players))
-        return True
 
     @property
     def how_many_players(self):
