@@ -132,7 +132,7 @@ class Game:
         return self.players[self._current_player_index]
 
     def send_current_player_to_penalty_box(self):
-        self.players[self._current_player_index].in_penalty_box = True
+        self.current_player.in_penalty_box = True
 
     def advance_current_place(self, roll):
         current_place = self.current_player.place
