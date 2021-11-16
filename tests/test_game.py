@@ -79,3 +79,11 @@ def test_wraps_next_player(game):
 
     game.next_player()
     assert game.current_player == "Alice"
+
+
+def test_is_sent_to_penalty_box_on_wrong_answer(game):
+    game.add("Alice")
+
+    game.wrong_answer()
+
+    assert game.in_penalty_box[0]
