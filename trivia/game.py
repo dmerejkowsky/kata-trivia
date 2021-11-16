@@ -66,24 +66,12 @@ class Game:
 
     def correct_answer(self):
         if (
-            self.current_player.in_penalty_box
-            and not self.current_player.is_getting_out_of_penalty_box
+            not self.current_player.in_penalty_box
+            or self.current_player.is_getting_out_of_penalty_box
         ):
-            self.has_ended = False
-            return
+            self.current_player.add_coin()
 
-        self._add_coin()
         self.has_ended = self._did_player_win()
-
-    def _add_coin(self):
-        info("Answer was correct!!!!")
-        self.current_player.purse += 1
-        info(
-            self.current_player,
-            "now has",
-            self.current_player.purse,
-            "Gold Coins.",
-        )
 
     def wrong_answer(self):
         info("Question was incorrectly answered")
@@ -91,7 +79,6 @@ class Game:
         self.send_current_player_to_penalty_box()
 
     def _did_player_win(self):
-        # TODO
         return self.current_player.purse == MAX_COINS_IN_PURSE
 
 

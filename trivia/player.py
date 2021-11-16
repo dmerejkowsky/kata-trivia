@@ -30,6 +30,16 @@ class Player:
         self.place = new_place
         info(f"{self.name}'s new location is {self.place}")
 
+    def add_coin(self):
+        info("Answer was correct!!!!")
+        self.purse += 1
+        info(
+            self.name,
+            "now has",
+            self.purse,
+            "Gold Coins.",
+        )
+
     def __eq__(self, other):
         return self.name == other.name
 
