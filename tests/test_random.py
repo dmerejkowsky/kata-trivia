@@ -13,7 +13,7 @@ def test_fake_random_source():
     assert actual == [6, 1, 3]
 
 
-def test_using_a_fake_random_as_iterator():
+def test_using_a_fake_random_sequence_as_iterator():
     random_sequence = FakeRandomSequence(start=1, end=6)
     random_sequence.set_reference([6, 1, 3])
 
@@ -21,13 +21,13 @@ def test_using_a_fake_random_as_iterator():
     assert actual == [6, 1, 3]
 
 
-def test_fake_random_checks_that_references_are_in_range():
+def test_sequence_checks_that_references_are_in_range():
     random_sequence = FakeRandomSequence(start=1, end=6)
     with pytest.raises(ValueError):
         random_sequence.set_reference([6, 7, 3])
 
 
-def test_fake_random_using_reference():
+def test_sequence_using_reference():
     path = Path("reference/randomSeq.txt")
     lines = path.read_text().splitlines()
     random_sequence = FakeRandomSequence.from_reference(lines[0:2])
