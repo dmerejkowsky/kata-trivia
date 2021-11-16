@@ -74,10 +74,6 @@ class Game:
 
     def add(self, player_name):
         self.players.append(player_name)
-        self.places[self.how_many_players] = 0
-        self.purses[self.how_many_players] = 0
-        self._in_penalty_box[self.how_many_players] = False
-
         self.info(player_name, "was added")
         self.info("They are player number", len(self.players))
 
