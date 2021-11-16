@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from conftest import FakeRandomSequence, FakeRandomSource
 
-from trivia import RandomSource
+from random_source import RandomSource
 
 
 def test_fake_random_source():

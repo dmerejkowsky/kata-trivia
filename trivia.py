@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import random
 from enum import Enum
+
+from random_source import RandomSource
 
 NUM_QUESTIONS_BY_CATEGORY = 50
 BOARD_SIZE = 12
@@ -31,14 +32,6 @@ def make_questions(category):
     return [
         f"{category.value} Question {i}" for i in range(0, NUM_QUESTIONS_BY_CATEGORY)
     ]
-
-
-class RandomSource:
-    def __init__(self):
-        pass
-
-    def in_range(self, start, end):
-        return random.randrange(start, end)
 
 
 class Log:
