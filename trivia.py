@@ -62,9 +62,7 @@ class Game:
         self._current_player_index = 0
         self.is_getting_out_of_penalty_box = False
 
-        self.questions = {}
-        for category in Category:
-            self.questions[category] = make_questions(category)
+        self.questions = {c: make_questions(c) for c in Category}
 
     def info(self, *args):
         self.log.info(*args)
