@@ -49,14 +49,23 @@ class Log:
         print(*args)
 
 
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.place = 0
+        self.purse = 0
+        self.in_penalty_box = False
+        self.is_getting_out_of_penalty_box = False
+
+    def __str__(self):
+        return self.name
+
+
 class Game:
     def __init__(self, log):
         self.log = log
 
-        self._players = []
-        self._places = [0] * 6
-        self._purses = [0] * 6
-        self._in_penalty_box = [0] * 6
+        self.players = []
         self.has_ended = False
 
         self._current_player_index = 0
@@ -68,16 +77,18 @@ class Game:
         self.log.info(*args)
 
     def is_playable(self):
-        return self.how_many_players >= 2
+        return len(self.players) >= 2
 
     def add(self, player_name):
-        self._players.append(player_name)
+        new_index = len(self.players) + 1
+        player = Player(name=player_name)
+        self.players.append(player)
         self.info(player_name, "was added")
-        self.info("They are player number", len(self._players))
+        self.info("They are player number", new_index)
 
     @property
     def how_many_players(self):
-        return len(self._players)
+        return len(self.players)
 
     def roll(self, roll):
         self.info(self.current_player, "is the current player")
@@ -97,17 +108,17 @@ class Game:
 
     def _handle_roll_from_penalty_box(self, roll):
         if roll % 2 != 0:
-            self.is_getting_out_of_penalty_box = True
+            self.current_player.is_getting_out_of_penalty_box = True
             self.info(self.current_player, "is getting out of the penalty box")
             return True
         else:
             self.info(self.current_player, "is not getting out of the penalty box")
-            self.is_getting_out_of_penalty_box = False
+            self.current_player.is_getting_out_of_penalty_box = False
             return False
 
     def _handle_roll(self, roll):
         self.advance_current_place(roll)
-        self.info(self.current_player + "'s new location is " + str(self.current_place))
+        self.info(f"{self.current_player}'s new location is {self.current_place}")
         self.info("The category is", self._current_category.value)
         self._ask_question()
 
@@ -117,23 +128,23 @@ class Game:
 
     @property
     def current_place(self):
-        return self._places[self._current_player_index]
+        return self.current_player.place
 
     @property
     def current_player(self):
-        return self._players[self._current_player_index]
+        return self.players[self._current_player_index]
 
     @property
     def in_penalty_box(self):
-        return self._in_penalty_box[self._current_player_index]
+        return self.current_player.in_penalty_box
 
     def send_current_player_to_penalty_box(self):
-        self._in_penalty_box[self._current_player_index] = True
+        self.players[self._current_player_index].in_penalty_box = True
 
     def advance_current_place(self, roll):
         current_place = self.current_place
         new_place = (current_place + roll) % BOARD_SIZE
-        self._places[self._current_player_index] = new_place
+        self.current_player.place = new_place
 
     def next_player(self):
         self._current_player_index = (
@@ -151,11 +162,11 @@ class Game:
 
     def _add_coin(self):
         self.info("Answer was correct!!!!")
-        self._purses[self._current_player_index] += 1
+        self.current_player.purse += 1
         self.info(
             self.current_player,
             "now has",
-            self._purses[self._current_player_index],
+            self.current_player.purse,
             "Gold Coins.",
         )
 
@@ -167,7 +178,7 @@ class Game:
         self.next_player()
 
     def _did_player_win(self):
-        return self._purses[self._current_player_index] == MAX_COINS_IN_PURSE
+        return self.current_player.purse == MAX_COINS_IN_PURSE
 
 
 def run_game(*, random_source, log):
