@@ -47,7 +47,7 @@ def test_stays_in_penalty_box_if_roll_is_even(game):
     game.roll(2)
 
     assert game.current_place == 0
-    assert game.in_penalty_box
+    assert game.current_player.in_penalty_box
 
 
 def test_goes_out_of_the_penalty_box_if_roll_is_off(game):
@@ -86,7 +86,7 @@ def test_is_sent_to_penalty_box_on_wrong_answer(game):
 
     game.wrong_answer()
 
-    assert game.in_penalty_box
+    assert game.current_player.in_penalty_box
 
 
 def test_answering_correctly_when_out_of_the_penalty_box(game):
