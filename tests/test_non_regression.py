@@ -2,7 +2,7 @@ from pathlib import Path
 
 from conftest import FakeRandomSource, SpyLog
 
-from trivia import run_game
+from trivia.game import run_game
 
 
 def test_non_regression():

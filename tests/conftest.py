@@ -1,6 +1,6 @@
 import pytest
 
-from trivia import Game
+from trivia.game import Game
 
 
 class FakeRandomSource:

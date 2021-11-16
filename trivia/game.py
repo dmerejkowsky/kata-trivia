@@ -2,7 +2,7 @@
 
 from enum import Enum
 
-from random_source import RandomSource
+from trivia.random_source import RandomSource
 
 NUM_QUESTIONS_BY_CATEGORY = 50
 BOARD_SIZE = 12

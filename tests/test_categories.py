@@ -1,6 +1,6 @@
 import pytest
 
-from trivia import Category
+from trivia.categories import Category
 
 
 @pytest.mark.parametrize(
