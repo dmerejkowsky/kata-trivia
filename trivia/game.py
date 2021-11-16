@@ -28,6 +28,10 @@ class Game:
     def is_playable(self):
         return len(self.players) >= 2
 
+    @property
+    def how_many_players(self):
+        return len(self.players)
+
     def add(self, player_name):
         new_index = len(self.players) + 1
         player = Player(name=player_name)
@@ -36,10 +40,7 @@ class Game:
         info("They are player number", new_index)
         if not self.current_player:
             self.current_player = player
-
-    @property
-    def how_many_players(self):
-        return len(self.players)
+        return player
 
     def roll(self, roll):
         info(self.current_player, "is the current player")
@@ -47,6 +48,11 @@ class Game:
         self.current_player.on_roll(roll, board_size=BOARD_SIZE)
         if not self.current_player.in_penalty_box:
             self.ask_question()
+
+    def next_player(self):
+        index = self.players.index(self.current_player)
+        next_index = (index + 1) % self.how_many_players
+        self.current_player = self.players[next_index]
 
     def ask_question(self):
         current_place = self.current_player.place
@@ -56,11 +62,6 @@ class Game:
         res = questions.pop(0)
         info(res)
 
-    def next_player(self):
-        index = self.players.index(self.current_player)
-        next_index = (index + 1) % self.how_many_players
-        self.current_player = self.players[next_index]
-
     def correct_answer(self):
         info("Answer was correct!!!!")
         self.current_player.on_correct_answer()
@@ -68,11 +69,7 @@ class Game:
 
     def wrong_answer(self):
         info("Question was incorrectly answered")
-        info(self.current_player, "was sent to the penalty box")
-        self.send_current_player_to_penalty_box()
-
-    def send_current_player_to_penalty_box(self):
-        self.current_player.in_penalty_box = True
+        self.current_player.on_wrong_answer()
 
 
 def run_game(*, random_source):

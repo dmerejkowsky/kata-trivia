@@ -16,23 +16,6 @@ def test_how_many_players(game):
     assert game.how_many_players == 2
 
 
-def test_roll(game):
-    game.add("Alice")
-    game.add("Bob")
-
-
-def test_wins_when_six_points_in_purse(game):
-    game.add("Alice")
-    game.current_player.purse = 6
-    assert game.current_player.did_win(max_coins=6)
-
-
-def test_still_playin_when_less_than_six_points_in_purse(game):
-    game.add("Alice")
-    game.current_player.purse = 5
-    assert not game.current_player.did_win(max_coins=6)
-
-
 def test_simple_roll(game):
     game.add("Alice")
     game.roll(2)
@@ -42,17 +25,17 @@ def test_simple_roll(game):
 
 def test_stays_in_penalty_box_if_roll_is_even(game):
     game.add("Alice")
-    game.add("Bob")
-    game.send_current_player_to_penalty_box()
+    bob = game.add("Bob")
+    bob.in_penalty_box = True
     game.roll(2)
 
-    assert game.current_player.place == 0
-    assert game.current_player.in_penalty_box
+    assert bob.place == 0
+    assert bob.in_penalty_box
 
 
-def test_do_not_ask_question_if_inside_teh_penalty_box(game):
-    game.add("Alice")
-    game.send_current_player_to_penalty_box()
+def test_do_not_ask_question_if_inside_the_penalty_box(game):
+    alice = game.add("Alice")
+    alice.in_penalty_box = True
     game.roll(3)
 
     # TODO
@@ -89,22 +72,20 @@ def test_is_sent_to_penalty_box_on_wrong_answer(game):
 
 
 def test_answering_correctly_when_out_of_the_penalty_box(game):
-    game.add("Alice")
-
+    alice = game.add("Alice")
     game.correct_answer()
-
-    assert game.current_player.purse == 1
+    assert alice.purse == 1
 
 
 def test_answering_correctly_when_getting_out_of_the_penalty_box(game):
-    game.add("Alice")
-    game.send_current_player_to_penalty_box()
-    game.current_player.is_getting_out_of_penalty_box = True
-    game.current_player.purse = 3
+    alice = game.add("Alice")
+    alice.in_penalty_box = True
+    alice.is_getting_out_of_penalty_box = True
+    alice.purse = 3
 
     game.correct_answer()
 
-    assert game.current_player.purse == 4
+    assert alice.purse == 4
     assert not game.has_ended
 
 

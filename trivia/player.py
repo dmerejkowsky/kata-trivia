@@ -20,6 +20,10 @@ class Player:
         if not self.in_penalty_box or self.is_getting_out_of_penalty_box:
             self.add_coin()
 
+    def on_wrong_answer(self):
+        info(self.name, "was sent to the penalty box")
+        self.in_penalty_box = True
+
     def roll_from_penalty_box(self, roll):
         if roll % 2 != 0:
             self.is_getting_out_of_penalty_box = True
