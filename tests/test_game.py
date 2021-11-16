@@ -66,3 +66,16 @@ def test_wraps_current_position(game):
 
     game.advance_current_place(4)
     assert game.current_place == 2
+
+
+def test_wraps_next_player(game):
+    game.add("Alice")
+    game.add("Bob")
+
+    assert game.current_player == "Alice"
+
+    game.next_player()
+    assert game.current_player == "Bob"
+
+    game.next_player()
+    assert game.current_player == "Alice"

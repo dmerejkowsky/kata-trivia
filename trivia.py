@@ -133,9 +133,9 @@ class Game:
         self.places[self._current_player_index] = new_place
 
     def next_player(self):
-        self._current_player_index += 1
-        if self._current_player_index == len(self.players):
-            self._current_player_index = 0
+        self._current_player_index = (
+            self._current_player_index + 1
+        ) % self.how_many_players
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self._current_player_index]:
