@@ -58,7 +58,6 @@ class Player:
         self.purse = 0
         self.in_penalty_box = False
         self.is_getting_out_of_penalty_box = False
-        self.can_answer = True
 
     def info(self, *args):
         self.log.info(*args)
