@@ -1,3 +1,6 @@
+from trivia.game import BOARD_SIZE
+
+
 def test_game_of_zero_is_not_playable(game):
     assert not game.is_playable()
 
@@ -57,10 +60,10 @@ def test_do_not_ask_question_if_inside_teh_penalty_box(game):
 
 def test_wraps_current_position(game):
     game.add("Alice")
-    game.current_player.advance(10)
+    game.current_player.advance(10, BOARD_SIZE)
     assert game.current_player.place == 10
 
-    game.current_player.advance(4)
+    game.current_player.advance(4, BOARD_SIZE)
     assert game.current_player.place == 2
 
 

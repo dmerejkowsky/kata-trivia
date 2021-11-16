@@ -1,31 +1,12 @@
 #!/usr/bin/env python
 
-from enum import Enum
-
+from trivia.categories import Category
+from trivia.player import Player
 from trivia.random_source import RandomSource
 
 NUM_QUESTIONS_BY_CATEGORY = 50
 BOARD_SIZE = 12
 MAX_COINS_IN_PURSE = 6
-
-
-class Category(Enum):
-    Pop = "Pop"
-    Science = "Science"
-    Sports = "Sports"
-    Rock = "Rock"
-
-    @classmethod
-    def for_place(cls, place):
-        reminder = place % 4
-        if reminder == 0:
-            return Category.Pop
-        elif reminder == 1:
-            return Category.Science
-        elif reminder == 2:
-            return Category.Sports
-        else:
-            return Category.Rock
 
 
 def make_questions(category):
@@ -40,47 +21,6 @@ class Log:
 
     def info(self, *args):
         print(*args)
-
-
-class Player:
-    def __init__(self, log, name):
-        # TODO
-        self.log = log
-        self.name = name
-        self.place = 0
-        self.purse = 0
-        self.in_penalty_box = False
-        self.is_getting_out_of_penalty_box = False
-
-    def info(self, *args):
-        self.log.info(*args)
-
-    def on_roll(self, roll):
-        if self.in_penalty_box:
-            self._handle_roll_from_penalty_box(roll)
-
-        if self.is_getting_out_of_penalty_box or not self.in_penalty_box:
-            self.advance(roll)
-
-    def _handle_roll_from_penalty_box(self, roll):
-        if roll % 2 != 0:
-            self.is_getting_out_of_penalty_box = True
-            self.info(self.name, "is getting out of the penalty box")
-        else:
-            self.info(self.name, "is not getting out of the penalty box")
-            self.is_getting_out_of_penalty_box = False
-
-    def advance(self, roll):
-        current_place = self.place
-        new_place = (current_place + roll) % BOARD_SIZE
-        self.place = new_place
-        self.info(f"{self.name}'s new location is {self.place}")
-
-    def __eq__(self, other):
-        return self.name == other.name
-
-    def __str__(self):
-        return self.name
 
 
 class Game:
@@ -116,7 +56,7 @@ class Game:
     def roll(self, roll):
         self.info(self.current_player, "is the current player")
         self.info("They have rolled a %s" % roll)
-        self.current_player.on_roll(roll)
+        self.current_player.on_roll(roll, board_size=BOARD_SIZE)
         if self.current_player.in_penalty_box:
             return
 
