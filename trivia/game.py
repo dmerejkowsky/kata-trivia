@@ -90,8 +90,6 @@ class Game:
         info(self.current_player, "was sent to the penalty box")
         self.send_current_player_to_penalty_box()
 
-        self.next_player()
-
     def _did_player_win(self):
         # TODO
         return self.current_player.purse == MAX_COINS_IN_PURSE
@@ -112,10 +110,10 @@ def run_game(*, random_source):
         else:
             game.correct_answer()
 
-            if game.has_ended:
-                break
-            else:
-                game.next_player()
+        if game.has_ended:
+            break
+        else:
+            game.next_player()
 
 
 def main():
