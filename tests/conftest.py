@@ -65,6 +65,7 @@ class SpyLog:
 
     def info(self, *args):
         message = " ".join(str(x) for x in args)
+        print(message)
         self.messages.append(message)
 
 

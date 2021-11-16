@@ -84,40 +84,22 @@ class Game:
         return len(self.players)
 
     def roll(self, roll):
-        self.info("%s is the current player" % self.players[self.current_player])
+        current_player = self.players[self.current_player]
+        self.info("%s is the current player" % current_player)
         self.info("They have rolled a %s" % roll)
 
         if self.in_penalty_box[self.current_player]:
             if roll % 2 != 0:
                 self.is_getting_out_of_penalty_box = True
-
-                self.info(
-                    "%s is getting out of the penalty box"
-                    % self.players[self.current_player]
-                )
-                self.advance_current_place(roll)
-                self.info(
-                    self.players[self.current_player]
-                    + f"'s new location is {self.current_place}"
-                )
-                category = self._current_category
-                self.info("The category is %s" % category.value)
-                self._ask_question()
+                self.info("%s is getting out of the penalty box" % current_player)
             else:
-                self.info(
-                    "%s is not getting out of the penalty box"
-                    % self.players[self.current_player]
-                )
+                self.info("%s is not getting out of the penalty box" % current_player)
                 self.is_getting_out_of_penalty_box = False
-        else:
-            self.advance_current_place(roll)
-            self.info(
-                self.players[self.current_player]
-                + "'s new location is "
-                + str(self.current_place)
-            )
-            self.info("The category is %s" % self._current_category.value)
-            self._ask_question()
+                return
+        self.advance_current_place(roll)
+        self.info(current_player + "'s new location is " + str(self.current_place))
+        self.info("The category is %s" % self._current_category.value)
+        self._ask_question()
 
     def _ask_question(self):
         questions = self.questions[self._current_category]
