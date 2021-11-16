@@ -140,7 +140,12 @@ class Game:
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self._current_player_index]:
-            return self._correct_answer_inside_penalty_box()
+            if not self.is_getting_out_of_penalty_box:
+                self.next_player()
+            else:
+                self._add_coin()
+                self.has_ended = self._did_player_win()
+                self.next_player()
         else:
             return self._correct_answer_outside_penalty_box()
 
@@ -148,15 +153,6 @@ class Game:
         self._add_coin()
         self.has_ended = self._did_player_win()
         self.next_player()
-
-    def _correct_answer_inside_penalty_box(self):
-        if self.is_getting_out_of_penalty_box:
-            self._add_coin()
-            self.has_ended = self._did_player_win()
-            self.next_player()
-        else:
-            self.next_player()
-            self.has_ended = False
 
     def _add_coin(self):
         self.info("Answer was correct!!!!")
