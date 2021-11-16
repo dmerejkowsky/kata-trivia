@@ -50,12 +50,39 @@ class Log:
 
 
 class Player:
-    def __init__(self, name):
+    def __init__(self, log, name):
+        # TODO
+        self.log = log
         self.name = name
         self.place = 0
         self.purse = 0
         self.in_penalty_box = False
         self.is_getting_out_of_penalty_box = False
+        self.can_answer = True
+
+    def info(self, *args):
+        self.log.info(*args)
+
+    def on_roll(self, roll):
+        if self.in_penalty_box:
+            self._handle_roll_from_penalty_box(roll)
+
+        if self.is_getting_out_of_penalty_box or not self.in_penalty_box:
+            self.advance(roll)
+
+    def _handle_roll_from_penalty_box(self, roll):
+        if roll % 2 != 0:
+            self.is_getting_out_of_penalty_box = True
+            self.info(self.name, "is getting out of the penalty box")
+        else:
+            self.info(self.name, "is not getting out of the penalty box")
+            self.is_getting_out_of_penalty_box = False
+
+    def advance(self, roll):
+        current_place = self.place
+        new_place = (current_place + roll) % BOARD_SIZE
+        self.place = new_place
+        self.info(f"{self.name}'s new location is {self.place}")
 
     def __eq__(self, other):
         return self.name == other.name
@@ -83,7 +110,7 @@ class Game:
 
     def add(self, player_name):
         new_index = len(self.players) + 1
-        player = Player(name=player_name)
+        player = Player(name=player_name, log=self.log)
         self.players.append(player)
         self.info(player_name, "was added")
         self.info("They are player number", new_index)
@@ -97,48 +124,22 @@ class Game:
     def roll(self, roll):
         self.info(self.current_player, "is the current player")
         self.info("They have rolled a %s" % roll)
-
+        self.current_player.on_roll(roll)
         if self.current_player.in_penalty_box:
-            should_advance = self._handle_roll_from_penalty_box(roll)
-            if not should_advance:
-                return
+            return
 
-        self._handle_roll(roll)
+        self.ask_question()
 
-    def _ask_question(self):
-        questions = self.questions[self.current_category]
+    def ask_question(self):
+        current_place = self.current_player.place
+        category = Category.for_place(current_place)
+        self.info("The category is", category.value)
+        questions = self.questions[category]
         res = questions.pop(0)
         self.info(res)
 
-    def _handle_roll_from_penalty_box(self, roll):
-        if roll % 2 != 0:
-            self.current_player.is_getting_out_of_penalty_box = True
-            self.info(self.current_player, "is getting out of the penalty box")
-            return True
-        else:
-            self.info(self.current_player, "is not getting out of the penalty box")
-            self.current_player.is_getting_out_of_penalty_box = False
-            return False
-
-    def _handle_roll(self, roll):
-        self.advance_current_place(roll)
-        self.info(
-            f"{self.current_player}'s new location is {self.current_player.place}"
-        )
-        self.info("The category is", self.current_category.value)
-        self._ask_question()
-
-    @property
-    def current_category(self):
-        return Category.for_place(self.current_player.place)
-
     def send_current_player_to_penalty_box(self):
         self.current_player.in_penalty_box = True
-
-    def advance_current_place(self, roll):
-        current_place = self.current_player.place
-        new_place = (current_place + roll) % BOARD_SIZE
-        self.current_player.place = new_place
 
     def next_player(self):
         index = self.players.index(self.current_player)

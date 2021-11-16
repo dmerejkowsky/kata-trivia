@@ -1,6 +1,3 @@
-from trivia import Category
-
-
 def test_game_of_zero_is_not_playable(game):
     assert not game.is_playable()
 
@@ -38,11 +35,11 @@ def test_simple_roll(game):
     game.roll(2)
 
     assert game.current_player.place == 2
-    assert game.current_category == Category.Sports
 
 
 def test_stays_in_penalty_box_if_roll_is_even(game):
     game.add("Alice")
+    game.add("Bob")
     game.send_current_player_to_penalty_box()
     game.roll(2)
 
@@ -50,21 +47,20 @@ def test_stays_in_penalty_box_if_roll_is_even(game):
     assert game.current_player.in_penalty_box
 
 
-def test_goes_out_of_the_penalty_box_if_roll_is_off(game):
+def test_do_not_ask_question_if_inside_teh_penalty_box(game):
     game.add("Alice")
     game.send_current_player_to_penalty_box()
     game.roll(3)
 
-    assert game.current_player.place == 3
-    assert game.current_player.is_getting_out_of_penalty_box
+    # TODO
 
 
 def test_wraps_current_position(game):
     game.add("Alice")
-    game.advance_current_place(10)
+    game.current_player.advance(10)
     assert game.current_player.place == 10
 
-    game.advance_current_place(4)
+    game.current_player.advance(4)
     assert game.current_player.place == 2
 
 
