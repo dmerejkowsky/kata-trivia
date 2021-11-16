@@ -85,20 +85,20 @@ class Game:
 
     def roll(self, roll):
         current_player = self.players[self.current_player]
-        self.info("%s is the current player" % current_player)
+        self.info(current_player, "is the current player")
         self.info("They have rolled a %s" % roll)
 
         if self.in_penalty_box[self.current_player]:
             if roll % 2 != 0:
                 self.is_getting_out_of_penalty_box = True
-                self.info("%s is getting out of the penalty box" % current_player)
+                self.info(current_player, "is getting out of the penalty box")
             else:
-                self.info("%s is not getting out of the penalty box" % current_player)
+                self.info(current_player, "is not getting out of the penalty box")
                 self.is_getting_out_of_penalty_box = False
                 return
         self.advance_current_place(roll)
         self.info(current_player + "'s new location is " + str(self.current_place))
-        self.info("The category is %s" % self._current_category.value)
+        self.info("The category is", self._current_category.value)
         self._ask_question()
 
     def _ask_question(self):
