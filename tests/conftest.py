@@ -1,6 +1,12 @@
 import pytest
 
+from trivia import context
 from trivia.game import Game
+
+
+@pytest.fixture(autouse=True)
+def set_spying_log():
+    context.log = SpyLog()
 
 
 class FakeRandomSource:
@@ -71,8 +77,7 @@ class SpyLog:
 
 @pytest.fixture
 def game():
-    log = SpyLog()
-    return Game(log=log)
+    return Game()
 
 
 @pytest.fixture

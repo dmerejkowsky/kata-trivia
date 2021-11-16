@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from trivia.categories import Category
+from trivia.context import info
 from trivia.player import Player
 from trivia.random_source import RandomSource
 
@@ -15,18 +16,8 @@ def make_questions(category):
     ]
 
 
-class Log:
-    def __init__(self):
-        pass
-
-    def info(self, *args):
-        print(*args)
-
-
 class Game:
-    def __init__(self, log):
-        self.log = log
-
+    def __init__(self):
         self.players = []
         self.has_ended = False
 
@@ -34,18 +25,15 @@ class Game:
 
         self.questions = {c: make_questions(c) for c in Category}
 
-    def info(self, *args):
-        self.log.info(*args)
-
     def is_playable(self):
         return len(self.players) >= 2
 
     def add(self, player_name):
         new_index = len(self.players) + 1
-        player = Player(name=player_name, log=self.log)
+        player = Player(name=player_name)
         self.players.append(player)
-        self.info(player_name, "was added")
-        self.info("They are player number", new_index)
+        info(player_name, "was added")
+        info("They are player number", new_index)
         if not self.current_player:
             self.current_player = player
 
@@ -54,8 +42,8 @@ class Game:
         return len(self.players)
 
     def roll(self, roll):
-        self.info(self.current_player, "is the current player")
-        self.info("They have rolled a %s" % roll)
+        info(self.current_player, "is the current player")
+        info("They have rolled a %s" % roll)
         self.current_player.on_roll(roll, board_size=BOARD_SIZE)
         if self.current_player.in_penalty_box:
             return
@@ -65,10 +53,10 @@ class Game:
     def ask_question(self):
         current_place = self.current_player.place
         category = Category.for_place(current_place)
-        self.info("The category is", category.value)
+        info("The category is", category.value)
         questions = self.questions[category]
         res = questions.pop(0)
-        self.info(res)
+        info(res)
 
     def send_current_player_to_penalty_box(self):
         self.current_player.in_penalty_box = True
@@ -91,9 +79,9 @@ class Game:
         self.next_player()
 
     def _add_coin(self):
-        self.info("Answer was correct!!!!")
+        info("Answer was correct!!!!")
         self.current_player.purse += 1
-        self.info(
+        info(
             self.current_player,
             "now has",
             self.current_player.purse,
@@ -101,8 +89,8 @@ class Game:
         )
 
     def wrong_answer(self):
-        self.info("Question was incorrectly answered")
-        self.info(self.current_player, "was sent to the penalty box")
+        info("Question was incorrectly answered")
+        info(self.current_player, "was sent to the penalty box")
         self.send_current_player_to_penalty_box()
 
         self.next_player()
@@ -111,8 +99,8 @@ class Game:
         return self.current_player.purse == MAX_COINS_IN_PURSE
 
 
-def run_game(*, random_source, log):
-    game = Game(log)
+def run_game(*, random_source):
+    game = Game()
 
     game.add("Chet")
     game.add("Pat")
@@ -132,9 +120,7 @@ def run_game(*, random_source, log):
 
 def main():
     random_source = RandomSource()
-    log = Log()
-
-    run_game(random_source=random_source, log=log)
+    run_game(random_source=random_source)
 
 
 if __name__ == "__main__":
