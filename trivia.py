@@ -89,22 +89,34 @@ class Game:
         self.info("They have rolled a %s" % roll)
 
         if self.in_penalty_box[self.current_player]:
-            if roll % 2 != 0:
-                self.is_getting_out_of_penalty_box = True
-                self.info(current_player, "is getting out of the penalty box")
-            else:
-                self.info(current_player, "is not getting out of the penalty box")
-                self.is_getting_out_of_penalty_box = False
+            should_advance = self._handle_roll_from_penalty_box(roll)
+            if not should_advance:
                 return
-        self.advance_current_place(roll)
-        self.info(current_player + "'s new location is " + str(self.current_place))
-        self.info("The category is", self._current_category.value)
-        self._ask_question()
+
+        self._handle_roll(roll)
 
     def _ask_question(self):
         questions = self.questions[self._current_category]
         res = questions.pop(0)
         self.info(res)
+
+    def _handle_roll_from_penalty_box(self, roll):
+        current_player = self.players[self.current_player]
+        if roll % 2 != 0:
+            self.is_getting_out_of_penalty_box = True
+            self.info(current_player, "is getting out of the penalty box")
+            return True
+        else:
+            self.info(current_player, "is not getting out of the penalty box")
+            self.is_getting_out_of_penalty_box = False
+            return False
+
+    def _handle_roll(self, roll):
+        current_player = self.players[self.current_player]
+        self.advance_current_place(roll)
+        self.info(current_player + "'s new location is " + str(self.current_place))
+        self.info("The category is", self._current_category.value)
+        self._ask_question()
 
     @property
     def _current_category(self):
