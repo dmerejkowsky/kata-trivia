@@ -132,6 +132,11 @@ class Game:
         new_place = (current_place + roll) % BOARD_SIZE
         self.places[self._current_player_index] = new_place
 
+    def next_player(self):
+        self._current_player_index += 1
+        if self._current_player_index == len(self.players):
+            self._current_player_index = 0
+
     def was_correctly_answered(self):
         if self.in_penalty_box[self._current_player_index]:
             if self.is_getting_out_of_penalty_box:
@@ -145,15 +150,10 @@ class Game:
                 )
 
                 winner = self._did_player_win()
-                self._current_player_index += 1
-                if self._current_player_index == len(self.players):
-                    self._current_player_index = 0
-
+                self.next_player()
                 return winner
             else:
-                self._current_player_index += 1
-                if self._current_player_index == len(self.players):
-                    self._current_player_index = 0
+                self.next_player()
                 return False
 
         else:
@@ -168,9 +168,7 @@ class Game:
             )
 
             winner = self._did_player_win()
-            self._current_player_index += 1
-            if self._current_player_index == len(self.players):
-                self._current_player_index = 0
+            self.next_player()
 
             return winner
 
@@ -179,9 +177,7 @@ class Game:
         self.info(self.current_player, "was sent to the penalty box")
         self.in_penalty_box[self._current_player_index] = True
 
-        self._current_player_index += 1
-        if self._current_player_index == len(self.players):
-            self._current_player_index = 0
+        self.next_player()
         return True
 
     def _did_player_win(self):
