@@ -4,6 +4,7 @@ import random
 from enum import Enum
 
 NUM_QUESTIONS_BY_CATEGORY = 50
+BOARD_SIZE = 12
 
 
 class Category(Enum):
@@ -134,7 +135,7 @@ class Game:
 
     def advance_current_place(self, roll):
         current_place = self.current_place
-        new_place = (current_place + roll) % 12
+        new_place = (current_place + roll) % BOARD_SIZE
         self.places[self.current_player] = new_place
 
     def was_correctly_answered(self):
