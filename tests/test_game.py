@@ -100,7 +100,7 @@ def test_answering_correctly_when_out_of_the_penalty_box(game):
 def test_answering_correctly_when_getting_out_of_the_penalty_box(game):
     game.add("Alice")
     game.send_current_player_to_penalty_box()
-    game.is_getting_out_of_penalty_box = True
+    game.current_player.is_getting_out_of_penalty_box = True
     game.current_player.purse = 3
 
     game.correct_answer()

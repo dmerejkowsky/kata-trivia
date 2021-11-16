@@ -69,7 +69,6 @@ class Game:
         self.has_ended = False
 
         self._current_player_index = 0
-        self.is_getting_out_of_penalty_box = False
 
         self.questions = {c: make_questions(c) for c in Category}
 
@@ -152,7 +151,10 @@ class Game:
         ) % self.how_many_players
 
     def correct_answer(self):
-        if self.in_penalty_box and not self.is_getting_out_of_penalty_box:
+        if (
+            self.in_penalty_box
+            and not self.current_player.is_getting_out_of_penalty_box
+        ):
             self.next_player()
             return
 
