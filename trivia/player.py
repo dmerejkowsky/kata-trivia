@@ -11,12 +11,16 @@ class Player:
 
     def on_roll(self, roll, board_size):
         if self.in_penalty_box:
-            self._handle_roll_from_penalty_box(roll)
+            self.roll_from_penalty_box(roll)
 
         if self.is_getting_out_of_penalty_box or not self.in_penalty_box:
             self.advance(roll, board_size)
 
-    def _handle_roll_from_penalty_box(self, roll):
+    def on_correct_answer(self):
+        if not self.in_penalty_box or self.is_getting_out_of_penalty_box:
+            self.add_coin()
+
+    def roll_from_penalty_box(self, roll):
         if roll % 2 != 0:
             self.is_getting_out_of_penalty_box = True
             info(self.name, "is getting out of the penalty box")
@@ -38,6 +42,9 @@ class Player:
             self.purse,
             "Gold Coins.",
         )
+
+    def did_win(self, max_coins):
+        return self.purse == max_coins
 
     def __eq__(self, other):
         return self.name == other.name

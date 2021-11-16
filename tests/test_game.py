@@ -24,13 +24,13 @@ def test_roll(game):
 def test_wins_when_six_points_in_purse(game):
     game.add("Alice")
     game.current_player.purse = 6
-    assert game._did_player_win()
+    assert game.current_player.did_win(max_coins=6)
 
 
 def test_still_playin_when_less_than_six_points_in_purse(game):
     game.add("Alice")
     game.current_player.purse = 5
-    assert not game._did_player_win()
+    assert not game.current_player.did_win(max_coins=6)
 
 
 def test_simple_roll(game):

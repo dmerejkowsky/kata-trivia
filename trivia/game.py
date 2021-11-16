@@ -56,9 +56,6 @@ class Game:
         res = questions.pop(0)
         info(res)
 
-    def send_current_player_to_penalty_box(self):
-        self.current_player.in_penalty_box = True
-
     def next_player(self):
         index = self.players.index(self.current_player)
         next_index = (index + 1) % self.how_many_players
@@ -66,21 +63,16 @@ class Game:
 
     def correct_answer(self):
         info("Answer was correct!!!!")
-        if (
-            not self.current_player.in_penalty_box
-            or self.current_player.is_getting_out_of_penalty_box
-        ):
-            self.current_player.add_coin()
-
-        self.has_ended = self._did_player_win()
+        self.current_player.on_correct_answer()
+        self.has_ended = self.current_player.did_win(max_coins=MAX_COINS_IN_PURSE)
 
     def wrong_answer(self):
         info("Question was incorrectly answered")
         info(self.current_player, "was sent to the penalty box")
         self.send_current_player_to_penalty_box()
 
-    def _did_player_win(self):
-        return self.current_player.purse == MAX_COINS_IN_PURSE
+    def send_current_player_to_penalty_box(self):
+        self.current_player.in_penalty_box = True
 
 
 def run_game(*, random_source):
