@@ -69,12 +69,11 @@ class Game:
             self.current_player.in_penalty_box
             and not self.current_player.is_getting_out_of_penalty_box
         ):
-            self.next_player()
+            self.has_ended = False
             return
 
         self._add_coin()
         self.has_ended = self._did_player_win()
-        self.next_player()
 
     def _add_coin(self):
         info("Answer was correct!!!!")
@@ -94,6 +93,7 @@ class Game:
         self.next_player()
 
     def _did_player_win(self):
+        # TODO
         return self.current_player.purse == MAX_COINS_IN_PURSE
 
 
@@ -112,8 +112,10 @@ def run_game(*, random_source):
         else:
             game.correct_answer()
 
-        if game.has_ended:
-            break
+            if game.has_ended:
+                break
+            else:
+                game.next_player()
 
 
 def main():
