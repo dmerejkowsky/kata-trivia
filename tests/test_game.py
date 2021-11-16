@@ -24,11 +24,10 @@ def test_stays_in_penalty_box_if_roll_is_even(game):
 
 
 def test_do_not_ask_question_if_inside_the_penalty_box(game):
+    # TODO
     alice = game.add("Alice")
     alice.in_penalty_box = True
     game.roll(3)
-
-    # TODO
 
 
 def test_wraps_next_player(game):
