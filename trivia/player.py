@@ -20,17 +20,20 @@ class Player:
         if not self.in_penalty_box or self.is_getting_out_of_penalty_box:
             self.add_coin()
 
+        if self.is_getting_out_of_penalty_box:
+            self.in_penalty_box = False
+
     def on_wrong_answer(self):
         info(self.name, "was sent to the penalty box")
         self.in_penalty_box = True
 
     def roll_from_penalty_box(self, roll):
-        if roll % 2 != 0:
-            self.is_getting_out_of_penalty_box = True
-            info(self.name, "is getting out of the penalty box")
-        else:
+        if roll % 2 == 0:
             info(self.name, "is not getting out of the penalty box")
             self.is_getting_out_of_penalty_box = False
+        else:
+            self.is_getting_out_of_penalty_box = True
+            info(self.name, "is getting out of the penalty box")
 
     def advance(self, roll, board_size):
         current_place = self.place
@@ -40,12 +43,7 @@ class Player:
 
     def add_coin(self):
         self.purse += 1
-        info(
-            self.name,
-            "now has",
-            self.purse,
-            "Gold Coins.",
-        )
+        info(self.name, "now has", self.purse, "Gold Coins.")
 
     def did_win(self, max_coins):
         return self.purse == max_coins
