@@ -37,7 +37,7 @@ def test_simple_roll(game):
     game.add("Alice")
     game.roll(2)
 
-    assert game.current_place == 2
+    assert game.current_player.place == 2
     assert game._current_category == Category.Sports
 
 
@@ -46,7 +46,7 @@ def test_stays_in_penalty_box_if_roll_is_even(game):
     game.send_current_player_to_penalty_box()
     game.roll(2)
 
-    assert game.current_place == 0
+    assert game.current_player.place == 0
     assert game.current_player.in_penalty_box
 
 
@@ -55,17 +55,17 @@ def test_goes_out_of_the_penalty_box_if_roll_is_off(game):
     game.send_current_player_to_penalty_box()
     game.roll(3)
 
-    assert game.current_place == 3
+    assert game.current_player.place == 3
     assert game.current_player.is_getting_out_of_penalty_box
 
 
 def test_wraps_current_position(game):
     game.add("Alice")
     game.advance_current_place(10)
-    assert game.current_place == 10
+    assert game.current_player.place == 10
 
     game.advance_current_place(4)
-    assert game.current_place == 2
+    assert game.current_player.place == 2
 
 
 def test_wraps_next_player(game):

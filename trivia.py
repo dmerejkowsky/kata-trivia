@@ -117,17 +117,15 @@ class Game:
 
     def _handle_roll(self, roll):
         self.advance_current_place(roll)
-        self.info(f"{self.current_player}'s new location is {self.current_place}")
+        self.info(
+            f"{self.current_player}'s new location is {self.current_player.place}"
+        )
         self.info("The category is", self._current_category.value)
         self._ask_question()
 
     @property
     def _current_category(self):
-        return Category.for_place(self.current_place)
-
-    @property
-    def current_place(self):
-        return self.current_player.place
+        return Category.for_place(self.current_player.place)
 
     @property
     def current_player(self):
@@ -137,7 +135,7 @@ class Game:
         self.players[self._current_player_index].in_penalty_box = True
 
     def advance_current_place(self, roll):
-        current_place = self.current_place
+        current_place = self.current_player.place
         new_place = (current_place + roll) % BOARD_SIZE
         self.current_player.place = new_place
 
