@@ -45,10 +45,8 @@ class Game:
         info(self.current_player, "is the current player")
         info("They have rolled a %s" % roll)
         self.current_player.on_roll(roll, board_size=BOARD_SIZE)
-        if self.current_player.in_penalty_box:
-            return
-
-        self.ask_question()
+        if not self.current_player.in_penalty_box:
+            self.ask_question()
 
     def ask_question(self):
         current_place = self.current_player.place
