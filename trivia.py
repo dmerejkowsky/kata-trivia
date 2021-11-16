@@ -211,7 +211,7 @@ def run_game(*, random_source, log):
         game.roll(random_source.in_range(1, 6))
 
         if random_source.in_range(0, 9) == 7:
-            continue_game = game.wrong_answer()
+            game.wrong_answer()
         else:
             continue_game = game.was_correctly_answered()
 
