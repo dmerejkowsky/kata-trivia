@@ -178,7 +178,6 @@ class Game:
         self.in_penalty_box[self._current_player_index] = True
 
         self.next_player()
-        return True
 
     def _did_player_win(self):
         return self.purses[self._current_player_index] == 6
