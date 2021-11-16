@@ -62,7 +62,7 @@ class Game:
 
         self.questions = {}
         for category in Category:
-            self.questions[category.value] = make_questions(category)
+            self.questions[category] = make_questions(category)
 
     def info(self, *args):
         self.log.info(*args)
@@ -101,7 +101,7 @@ class Game:
                     + f"'s new location is {self.current_place}"
                 )
                 category = self._current_category
-                self.info("The category is %s" % category)
+                self.info("The category is %s" % category.value)
                 self._ask_question()
             else:
                 self.info(
@@ -116,7 +116,7 @@ class Game:
                 + "'s new location is "
                 + str(self.current_place)
             )
-            self.info("The category is %s" % self._current_category)
+            self.info("The category is %s" % self._current_category.value)
             self._ask_question()
 
     def _ask_question(self):
@@ -126,8 +126,7 @@ class Game:
 
     @property
     def _current_category(self):
-        category = Category.for_place(self.current_place)
-        return category.value
+        return Category.for_place(self.current_place)
 
     @property
     def current_place(self):

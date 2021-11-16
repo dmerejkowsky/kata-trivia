@@ -1,3 +1,6 @@
+from trivia import Category
+
+
 def test_game_of_zero_is_not_playable(game):
     assert not game.is_playable()
 
@@ -33,7 +36,9 @@ def test_still_playin_when_less_than_six_points_in_purse(game):
 def test_simple_roll(game):
     game.add("Alice")
     game.roll(2)
-    assert game.places[game.current_player] == 2
+
+    assert game.current_place == 2
+    assert game._current_category == Category.Sports
 
 
 def test_wraps_current_position(game):
