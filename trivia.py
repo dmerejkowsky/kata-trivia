@@ -139,38 +139,36 @@ class Game:
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self._current_player_index]:
-            if self.is_getting_out_of_penalty_box:
-                self.info("Answer was correct!!!!")
-                self.purses[self._current_player_index] += 1
-                self.info(
-                    self.current_player,
-                    "now has",
-                    self.purses[self._current_player_index],
-                    "Gold Coins.",
-                )
-
-                winner = self._did_player_win()
-                self.next_player()
-                return winner
-            else:
-                self.next_player()
-                return False
-
+            return self._correct_answer_inside_penalty_box()
         else:
+            return self._correct_answer_outside_penalty_box()
 
-            self.info("Answer was correct!!!!")
-            self.purses[self._current_player_index] += 1
-            self.info(
-                self.current_player,
-                "now has",
-                self.purses[self._current_player_index],
-                "Gold Coins.",
-            )
+    def _correct_answer_outside_penalty_box(self):
+        self._add_coin()
+        winner = self._did_player_win()
+        self.next_player()
 
+        return winner
+
+    def _correct_answer_inside_penalty_box(self):
+        if self.is_getting_out_of_penalty_box:
+            self._add_coin()
             winner = self._did_player_win()
             self.next_player()
-
             return winner
+        else:
+            self.next_player()
+            return False
+
+    def _add_coin(self):
+        self.info("Answer was correct!!!!")
+        self.purses[self._current_player_index] += 1
+        self.info(
+            self.current_player,
+            "now has",
+            self.purses[self._current_player_index],
+            "Gold Coins.",
+        )
 
     def wrong_answer(self):
         self.info("Question was incorrectly answered")
