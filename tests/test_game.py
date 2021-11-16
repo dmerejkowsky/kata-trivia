@@ -38,7 +38,7 @@ def test_simple_roll(game):
     game.roll(2)
 
     assert game.current_player.place == 2
-    assert game._current_category == Category.Sports
+    assert game.current_category == Category.Sports
 
 
 def test_stays_in_penalty_box_if_roll_is_even(game):

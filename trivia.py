@@ -57,6 +57,9 @@ class Player:
         self.in_penalty_box = False
         self.is_getting_out_of_penalty_box = False
 
+    def __eq__(self, other):
+        return self.name == other.name
+
     def __str__(self):
         return self.name
 
@@ -68,7 +71,7 @@ class Game:
         self.players = []
         self.has_ended = False
 
-        self._current_player_index = 0
+        self.current_player = None
 
         self.questions = {c: make_questions(c) for c in Category}
 
@@ -84,6 +87,8 @@ class Game:
         self.players.append(player)
         self.info(player_name, "was added")
         self.info("They are player number", new_index)
+        if not self.current_player:
+            self.current_player = player
 
     @property
     def how_many_players(self):
@@ -101,7 +106,7 @@ class Game:
         self._handle_roll(roll)
 
     def _ask_question(self):
-        questions = self.questions[self._current_category]
+        questions = self.questions[self.current_category]
         res = questions.pop(0)
         self.info(res)
 
@@ -120,16 +125,12 @@ class Game:
         self.info(
             f"{self.current_player}'s new location is {self.current_player.place}"
         )
-        self.info("The category is", self._current_category.value)
+        self.info("The category is", self.current_category.value)
         self._ask_question()
 
     @property
-    def _current_category(self):
+    def current_category(self):
         return Category.for_place(self.current_player.place)
-
-    @property
-    def current_player(self):
-        return self.players[self._current_player_index]
 
     def send_current_player_to_penalty_box(self):
         self.current_player.in_penalty_box = True
@@ -140,9 +141,9 @@ class Game:
         self.current_player.place = new_place
 
     def next_player(self):
-        self._current_player_index = (
-            self._current_player_index + 1
-        ) % self.how_many_players
+        index = self.players.index(self.current_player)
+        next_index = (index + 1) % self.how_many_players
+        self.current_player = self.players[next_index]
 
     def correct_answer(self):
         if (
