@@ -57,7 +57,7 @@ class Game:
         self.purses = [0] * 6
         self.in_penalty_box = [0] * 6
 
-        self.current_player = 0
+        self._current_player_index = 0
         self.is_getting_out_of_penalty_box = False
 
         self.questions = {}
@@ -84,11 +84,10 @@ class Game:
         return len(self.players)
 
     def roll(self, roll):
-        current_player = self.players[self.current_player]
-        self.info(current_player, "is the current player")
+        self.info(self.current_player, "is the current player")
         self.info("They have rolled a %s" % roll)
 
-        if self.in_penalty_box[self.current_player]:
+        if self.in_penalty_box[self._current_player_index]:
             should_advance = self._handle_roll_from_penalty_box(roll)
             if not should_advance:
                 return
@@ -101,20 +100,18 @@ class Game:
         self.info(res)
 
     def _handle_roll_from_penalty_box(self, roll):
-        current_player = self.players[self.current_player]
         if roll % 2 != 0:
             self.is_getting_out_of_penalty_box = True
-            self.info(current_player, "is getting out of the penalty box")
+            self.info(self.current_player, "is getting out of the penalty box")
             return True
         else:
-            self.info(current_player, "is not getting out of the penalty box")
+            self.info(self.current_player, "is not getting out of the penalty box")
             self.is_getting_out_of_penalty_box = False
             return False
 
     def _handle_roll(self, roll):
-        current_player = self.players[self.current_player]
         self.advance_current_place(roll)
-        self.info(current_player + "'s new location is " + str(self.current_place))
+        self.info(self.current_player + "'s new location is " + str(self.current_place))
         self.info("The category is", self._current_category.value)
         self._ask_question()
 
@@ -124,67 +121,71 @@ class Game:
 
     @property
     def current_place(self):
-        return self.places[self.current_player]
+        return self.places[self._current_player_index]
+
+    @property
+    def current_player(self):
+        return self.players[self._current_player_index]
 
     def advance_current_place(self, roll):
         current_place = self.current_place
         new_place = (current_place + roll) % BOARD_SIZE
-        self.places[self.current_player] = new_place
+        self.places[self._current_player_index] = new_place
 
     def was_correctly_answered(self):
-        if self.in_penalty_box[self.current_player]:
+        if self.in_penalty_box[self._current_player_index]:
             if self.is_getting_out_of_penalty_box:
                 self.info("Answer was correct!!!!")
-                self.purses[self.current_player] += 1
+                self.purses[self._current_player_index] += 1
                 self.info(
-                    self.players[self.current_player]
-                    + " now has "
-                    + str(self.purses[self.current_player])
-                    + " Gold Coins."
+                    self.current_player,
+                    "now has",
+                    self.purses[self._current_player_index],
+                    "Gold Coins.",
                 )
 
                 winner = self._did_player_win()
-                self.current_player += 1
-                if self.current_player == len(self.players):
-                    self.current_player = 0
+                self._current_player_index += 1
+                if self._current_player_index == len(self.players):
+                    self._current_player_index = 0
 
                 return winner
             else:
-                self.current_player += 1
-                if self.current_player == len(self.players):
-                    self.current_player = 0
+                self._current_player_index += 1
+                if self._current_player_index == len(self.players):
+                    self._current_player_index = 0
                 return False
 
         else:
 
             self.info("Answer was correct!!!!")
-            self.purses[self.current_player] += 1
+            self.purses[self._current_player_index] += 1
             self.info(
-                self.players[self.current_player]
-                + " now has "
-                + str(self.purses[self.current_player])
-                + " Gold Coins."
+                self.current_player,
+                "now has",
+                self.purses[self._current_player_index],
+                "Gold Coins.",
             )
 
             winner = self._did_player_win()
-            self.current_player += 1
-            if self.current_player == len(self.players):
-                self.current_player = 0
+            self._current_player_index += 1
+            if self._current_player_index == len(self.players):
+                self._current_player_index = 0
 
             return winner
 
     def wrong_answer(self):
         self.info("Question was incorrectly answered")
-        self.info(self.players[self.current_player] + " was sent to the penalty box")
-        self.in_penalty_box[self.current_player] = True
+        self.info(self.current_player, "was sent to the penalty box")
+        self.in_penalty_box[self._current_player_index] = True
 
-        self.current_player += 1
-        if self.current_player == len(self.players):
-            self.current_player = 0
+        self._current_player_index += 1
+        if self._current_player_index == len(self.players):
+            self._current_player_index = 0
         return True
 
     def _did_player_win(self):
-        return self.purses[self.current_player] == 6
+        return self.purses[self._current_player_index] == 6
 
 
 def run_game(*, random_source, log):
