@@ -23,13 +23,13 @@ def test_roll(game):
 
 def test_wins_when_six_points_in_purse(game):
     game.add("Alice")
-    game.purses[0] = 6
+    game._purses[0] = 6
     assert game._did_player_win()
 
 
 def test_still_playin_when_less_than_six_points_in_purse(game):
     game.add("Alice")
-    game.purses[0] = 5
+    game._purses[0] = 5
     assert not game._did_player_win()
 
 
@@ -94,26 +94,26 @@ def test_answering_correctly_when_out_of_the_penalty_box(game):
 
     game.correct_answer()
 
-    assert game.purses[0] == 1
+    assert game._purses[0] == 1
 
 
 def test_answering_correctly_when_getting_out_of_the_penalty_box(game):
     game.add("Alice")
     game.send_current_player_to_penalty_box()
     game.is_getting_out_of_penalty_box = True
-    game.purses[0] = 3
+    game._purses[0] = 3
 
     game.correct_answer()
 
-    assert game.purses[0] == 4
+    assert game._purses[0] == 4
     assert not game.has_ended
 
 
 def test_answering_correctly_and_winning_the_game(game):
     game.add("Alice")
-    game.purses[0] = 5
+    game._purses[0] = 5
 
     game.correct_answer()
 
-    assert game.purses[0] == 6
+    assert game._purses[0] == 6
     assert game.has_ended

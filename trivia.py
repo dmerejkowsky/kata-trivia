@@ -53,9 +53,9 @@ class Game:
     def __init__(self, log):
         self.log = log
 
-        self.players = []
-        self.places = [0] * 6
-        self.purses = [0] * 6
+        self._players = []
+        self._places = [0] * 6
+        self._purses = [0] * 6
         self._in_penalty_box = [0] * 6
         self.has_ended = False
 
@@ -73,13 +73,13 @@ class Game:
         return self.how_many_players >= 2
 
     def add(self, player_name):
-        self.players.append(player_name)
+        self._players.append(player_name)
         self.info(player_name, "was added")
-        self.info("They are player number", len(self.players))
+        self.info("They are player number", len(self._players))
 
     @property
     def how_many_players(self):
-        return len(self.players)
+        return len(self._players)
 
     def roll(self, roll):
         self.info(self.current_player, "is the current player")
@@ -119,11 +119,11 @@ class Game:
 
     @property
     def current_place(self):
-        return self.places[self._current_player_index]
+        return self._places[self._current_player_index]
 
     @property
     def current_player(self):
-        return self.players[self._current_player_index]
+        return self._players[self._current_player_index]
 
     @property
     def in_penalty_box(self):
@@ -135,7 +135,7 @@ class Game:
     def advance_current_place(self, roll):
         current_place = self.current_place
         new_place = (current_place + roll) % BOARD_SIZE
-        self.places[self._current_player_index] = new_place
+        self._places[self._current_player_index] = new_place
 
     def next_player(self):
         self._current_player_index = (
@@ -153,11 +153,11 @@ class Game:
 
     def _add_coin(self):
         self.info("Answer was correct!!!!")
-        self.purses[self._current_player_index] += 1
+        self._purses[self._current_player_index] += 1
         self.info(
             self.current_player,
             "now has",
-            self.purses[self._current_player_index],
+            self._purses[self._current_player_index],
             "Gold Coins.",
         )
 
@@ -169,7 +169,7 @@ class Game:
         self.next_player()
 
     def _did_player_win(self):
-        return self.purses[self._current_player_index] == MAX_COINS_IN_PURSE
+        return self._purses[self._current_player_index] == MAX_COINS_IN_PURSE
 
 
 def run_game(*, random_source, log):
