@@ -43,7 +43,7 @@ def test_simple_roll(game):
 
 def test_stays_in_penalty_box_if_roll_is_even(game):
     game.add("Alice")
-    game._in_penalty_box[0] = True
+    game.send_current_player_to_penalty_box()
     game.roll(2)
 
     assert game.current_place == 0
@@ -52,7 +52,7 @@ def test_stays_in_penalty_box_if_roll_is_even(game):
 
 def test_goes_out_of_the_penalty_box_if_roll_is_off(game):
     game.add("Alice")
-    game._in_penalty_box[0] = True
+    game.send_current_player_to_penalty_box()
     game.roll(3)
 
     assert game.current_place == 3
@@ -99,7 +99,7 @@ def test_answering_correctly_when_out_of_the_penalty_box(game):
 
 def test_answering_correctly_when_getting_out_of_the_penalty_box(game):
     game.add("Alice")
-    game._in_penalty_box[0] = True
+    game.send_current_player_to_penalty_box()
     game.is_getting_out_of_penalty_box = True
     game.purses[0] = 3
 

@@ -133,6 +133,9 @@ class Game:
     def in_penalty_box(self):
         return self._in_penalty_box[self._current_player_index]
 
+    def send_current_player_to_penalty_box(self):
+        self._in_penalty_box[self._current_player_index] = True
+
     def advance_current_place(self, roll):
         current_place = self.current_place
         new_place = (current_place + roll) % BOARD_SIZE
@@ -165,7 +168,7 @@ class Game:
     def wrong_answer(self):
         self.info("Question was incorrectly answered")
         self.info(self.current_player, "was sent to the penalty box")
-        self._in_penalty_box[self._current_player_index] = True
+        self.send_current_player_to_penalty_box()
 
         self.next_player()
 
