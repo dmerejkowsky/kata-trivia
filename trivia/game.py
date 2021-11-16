@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+import sys
 
 from trivia.categories import Category
 from trivia.context import info
@@ -65,6 +65,7 @@ class Game:
         self.current_player = self.players[next_index]
 
     def correct_answer(self):
+        info("Answer was correct!!!!")
         if (
             not self.current_player.in_penalty_box
             or self.current_player.is_getting_out_of_penalty_box
@@ -103,10 +104,23 @@ def run_game(*, random_source):
             game.next_player()
 
 
-def main():
-    random_source = RandomSource()
+def main(use_reference=False):
+
+    from pathlib import Path
+
+    from tests.conftest import FakeRandomSource
+
+    if use_reference:
+        path = Path("reference/randomSeq.txt")
+        lines = path.read_text().splitlines()
+        random_source = FakeRandomSource()
+        random_source.apply_reference(lines[0:2])
+        random_source.apply_reference(lines[3:5])
+    else:
+        random_source = RandomSource()
     run_game(random_source=random_source)
 
 
 if __name__ == "__main__":
-    main()
+    use_reference = "--use-reference" in sys.argv
+    main(use_reference=use_reference)
