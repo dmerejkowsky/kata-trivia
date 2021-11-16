@@ -56,6 +56,7 @@ class Game:
         self.places = [0] * 6
         self.purses = [0] * 6
         self.in_penalty_box = [0] * 6
+        self._end_game = False
 
         self._current_player_index = 0
         self.is_getting_out_of_penalty_box = False
@@ -78,6 +79,9 @@ class Game:
 
         self.info(player_name, "was added")
         self.info("They are player number", len(self.players))
+
+    def has_ended(self):
+        return self._end_game
 
     @property
     def how_many_players(self):
@@ -145,20 +149,17 @@ class Game:
 
     def _correct_answer_outside_penalty_box(self):
         self._add_coin()
-        winner = self._did_player_win()
+        self._end_game = self._did_player_win()
         self.next_player()
-
-        return winner
 
     def _correct_answer_inside_penalty_box(self):
         if self.is_getting_out_of_penalty_box:
             self._add_coin()
-            winner = self._did_player_win()
+            self._end_game = self._did_player_win()
             self.next_player()
-            return winner
         else:
             self.next_player()
-            return False
+            self._end_game = False
 
     def _add_coin(self):
         self.info("Answer was correct!!!!")
@@ -194,9 +195,9 @@ def run_game(*, random_source, log):
         if random_source.in_range(0, 9) == 7:
             game.wrong_answer()
         else:
-            has_a_winner = game.was_correctly_answered()
+            game.was_correctly_answered()
 
-        if has_a_winner:
+        if game.has_ended():
             break
 
 
