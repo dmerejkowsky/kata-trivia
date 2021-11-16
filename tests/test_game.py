@@ -1,6 +1,3 @@
-from trivia import context
-
-
 def test_game_of_zero_is_not_playable(game):
     assert not game.is_playable()
 
@@ -31,8 +28,16 @@ def test_do_not_ask_question_if_inside_the_penalty_box(game):
     alice.in_penalty_box = True
     game.roll(2)
 
-    last_message = context.log.messages[-1]
-    assert last_message == "Alice is not getting out of the penalty box"
+    assert alice.place == 0
+
+
+def test_ask_question_if_getting_outside_of_the_penalty_box(game):
+    alice = game.add("Alice")
+    alice.in_penalty_box = True
+
+    game.roll(3)
+
+    assert alice.place == 3
 
 
 def test_wraps_next_player(game):
