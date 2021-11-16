@@ -43,16 +43,16 @@ def test_simple_roll(game):
 
 def test_stays_in_penalty_box_if_roll_is_even(game):
     game.add("Alice")
-    game.in_penalty_box[0] = True
+    game._in_penalty_box[0] = True
     game.roll(2)
 
     assert game.current_place == 0
-    assert game.in_penalty_box[0]
+    assert game.in_penalty_box()
 
 
 def test_goes_out_of_the_penalty_box_if_roll_is_off(game):
     game.add("Alice")
-    game.in_penalty_box[0] = True
+    game._in_penalty_box[0] = True
     game.roll(3)
 
     assert game.current_place == 3
@@ -86,32 +86,34 @@ def test_is_sent_to_penalty_box_on_wrong_answer(game):
 
     game.wrong_answer()
 
-    assert game.in_penalty_box[0]
+    assert game.in_penalty_box()
 
 
 def test_answering_correctly_when_out_of_the_penalty_box(game):
     game.add("Alice")
 
-    game.was_correctly_answered()
+    game.correct_answer()
 
     assert game.purses[0] == 1
 
 
 def test_answering_correctly_when_getting_out_of_the_penalty_box(game):
     game.add("Alice")
-    game.in_penalty_box[0] = True
+    game._in_penalty_box[0] = True
     game.is_getting_out_of_penalty_box = True
     game.purses[0] = 3
 
-    game.was_correctly_answered()
+    game.correct_answer()
 
     assert game.purses[0] == 4
+    assert not game.has_ended
 
 
 def test_answering_correctly_and_winning_the_game(game):
     game.add("Alice")
     game.purses[0] = 5
 
-    game.was_correctly_answered()
+    game.correct_answer()
 
     assert game.purses[0] == 6
+    assert game.has_ended
