@@ -89,7 +89,7 @@ class Game:
         self.info(self.current_player, "is the current player")
         self.info("They have rolled a %s" % roll)
 
-        if self.in_penalty_box():
+        if self.in_penalty_box:
             should_advance = self._handle_roll_from_penalty_box(roll)
             if not should_advance:
                 return
@@ -129,6 +129,7 @@ class Game:
     def current_player(self):
         return self.players[self._current_player_index]
 
+    @property
     def in_penalty_box(self):
         return self._in_penalty_box[self._current_player_index]
 
@@ -143,7 +144,7 @@ class Game:
         ) % self.how_many_players
 
     def correct_answer(self):
-        if self.in_penalty_box() and not self.is_getting_out_of_penalty_box:
+        if self.in_penalty_box and not self.is_getting_out_of_penalty_box:
             self.next_player()
             return
 
