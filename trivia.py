@@ -94,18 +94,10 @@ class Game:
                     "%s is getting out of the penalty box"
                     % self.players[self.current_player]
                 )
-                self.places[self.current_player] = (
-                    self.places[self.current_player] + roll
-                )
-                if self.places[self.current_player] > 11:
-                    self.places[self.current_player] = (
-                        self.places[self.current_player] - 12
-                    )
-
+                self.advance_current_place(roll)
                 self.info(
                     self.players[self.current_player]
-                    + "'s new location is "
-                    + str(self.places[self.current_player])
+                    + f"'s new location is {self.current_place}"
                 )
                 category = self._current_category
                 self.info("The category is %s" % category)
@@ -117,14 +109,11 @@ class Game:
                 )
                 self.is_getting_out_of_penalty_box = False
         else:
-            self.places[self.current_player] = self.places[self.current_player] + roll
-            if self.places[self.current_player] > 11:
-                self.places[self.current_player] = self.places[self.current_player] - 12
-
+            self.advance_current_place(roll)
             self.info(
                 self.players[self.current_player]
                 + "'s new location is "
-                + str(self.places[self.current_player])
+                + str(self.current_place)
             )
             self.info("The category is %s" % self._current_category)
             self._ask_question()
@@ -136,9 +125,19 @@ class Game:
 
     @property
     def _current_category(self):
-        current_place = self.places[self.current_player]
-        category = Category.for_place(current_place)
+        category = Category.for_place(self.current_place)
         return category.value
+
+    @property
+    def current_place(self):
+        return self.places[self.current_player]
+
+    def advance_current_place(self, roll):
+        current_place = self.current_place
+        new_place = current_place + roll
+        if new_place > 11:
+            new_place = new_place - 12
+        self.places[self.current_player] = new_place
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self.current_player]:

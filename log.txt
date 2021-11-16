@@ -26,3 +26,7 @@
 12. First refactoring: Introduce NUM_QUESTIONS_BY_CATEGORY, replace 4 named lists by a dict
 
 13: Introduce a Log
+
+14. Refactorings
+
+15. Use `raise Exception("Kaboom")` to make sure the code is covered
