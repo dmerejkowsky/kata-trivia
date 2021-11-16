@@ -8,9 +8,21 @@ NUM_QUESTIONS_BY_CATEGORY = 50
 
 class Category(Enum):
     Pop = "Pop"
-    Sience = "Science"
+    Science = "Science"
     Sports = "Sports"
     Rock = "Rock"
+
+    @classmethod
+    def for_place(cls, place):
+        reminder = place % 4
+        if reminder == 0:
+            return Category.Pop
+        elif reminder == 1:
+            return Category.Science
+        elif reminder == 2:
+            return Category.Sports
+        else:
+            return Category.Rock
 
 
 def make_questions(category):
@@ -95,7 +107,8 @@ class Game:
                     + "'s new location is "
                     + str(self.places[self.current_player])
                 )
-                self.info("The category is %s" % self._current_category)
+                category = self._current_category
+                self.info("The category is %s" % category)
                 self._ask_question()
             else:
                 self.info(
@@ -123,25 +136,9 @@ class Game:
 
     @property
     def _current_category(self):
-        if self.places[self.current_player] == 0:
-            return "Pop"
-        if self.places[self.current_player] == 4:
-            return "Pop"
-        if self.places[self.current_player] == 8:
-            return "Pop"
-        if self.places[self.current_player] == 1:
-            return "Science"
-        if self.places[self.current_player] == 5:
-            return "Science"
-        if self.places[self.current_player] == 9:
-            return "Science"
-        if self.places[self.current_player] == 2:
-            return "Sports"
-        if self.places[self.current_player] == 6:
-            return "Sports"
-        if self.places[self.current_player] == 10:
-            return "Sports"
-        return "Rock"
+        current_place = self.places[self.current_player]
+        category = Category.for_place(current_place)
+        return category.value
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self.current_player]:
@@ -165,7 +162,7 @@ class Game:
                 self.current_player += 1
                 if self.current_player == len(self.players):
                     self.current_player = 0
-                return True
+                return False
 
         else:
 
@@ -196,7 +193,7 @@ class Game:
         return True
 
     def _did_player_win(self):
-        return not (self.purses[self.current_player] == 6)
+        return self.purses[self.current_player] == 6
 
 
 def run_game(*, random_source, log):
@@ -206,16 +203,15 @@ def run_game(*, random_source, log):
     game.add("Pat")
     game.add("Sue")
 
-    continue_game = False
     while True:
         game.roll(random_source.in_range(1, 6))
 
         if random_source.in_range(0, 9) == 7:
             game.wrong_answer()
         else:
-            continue_game = game.was_correctly_answered()
+            has_a_winner = game.was_correctly_answered()
 
-        if not continue_game:
+        if has_a_winner:
             break
 
 
